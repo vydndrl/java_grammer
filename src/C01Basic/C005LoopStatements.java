@@ -121,7 +121,7 @@ public class C005LoopStatements {
 //        Scanner sc = new Scanner(System.in);
 //        int input = sc.nextInt();
 //        boolean tureOrNot = false;
-//        for (int i = 2; i < input; i++) {
+//        for (int i = 2; i*i < input; i++) {
 //            if(input % i == 0) {
 //                tureOrNot = true;
 //                break;
