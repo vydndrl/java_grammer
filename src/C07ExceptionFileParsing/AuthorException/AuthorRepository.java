@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorRepository {
-    List<Author> authorList;
+    private List<Author> authorList;
 
 
     public AuthorRepository() {
@@ -18,6 +18,4 @@ public class AuthorRepository {
     public List<Author> getAuthorList() {
         return authorList;
     }
-
-
 }

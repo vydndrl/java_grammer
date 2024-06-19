@@ -1,6 +1,7 @@
 package C07ExceptionFileParsing.AuthorException;
 
-import java.sql.SQLException;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class AuthorService {
 
@@ -10,40 +11,38 @@ public class AuthorService {
         authorRepository = new AuthorRepository();
     }
 
-    public void register(String name, String email, String password) throws SQLException {
+    public void register(String name, String email, String password) throws IllegalArgumentException {
 
         if (authorRepository.getAuthorList().equals(email)) {
-            throw new SQLException("이미 동일한 email이 존재합니다.");
+            throw new IllegalArgumentException("이미 동일한 email이 존재합니다.");
         } else if (password.length() <= 5) {
-            throw new SQLException("비밀번호가 5자리 이하입니다.");
+            throw new IllegalArgumentException("비밀번호가 5자리 이하입니다.");
         } else {
             authorRepository.register(new Author(name, email, password));
             System.out.println("성공적으로 회원가입이 완료되었습니다.");
         }
     }
 
-    public void login(String email, String password) throws SQLException {
-        Author myAuthor = findAuthor(email);
+    public void login(String email, String password) throws NoSuchElementException, IllegalArgumentException {
+        boolean passwordNotEqual = false;
+        boolean emailNotFound = false;
 
-        if (myAuthor == null) {
-            throw new SQLException("계정이 존재하지 않습니다.");
-        } else if (!myAuthor.getEmail().equals(email)) {
-            throw new SQLException("이메일이 일치하지 않습니다.");
-        } else if (!myAuthor.getEmail().equals(password)) {
-            throw new SQLException("비밀번호가 일치하지 않습니다.");
-        }
+        List<Author> authorList = authorRepository.getAuthorList();
 
-
-    }
-
-    private Author findAuthor(String email) {
-        Author myAuthor = null;
-        for (int i = 0; i < authorRepository.getAuthorList().size(); i++) {
-            if (authorRepository.getAuthorList().get(i).getEmail().equals(email)) {
-                myAuthor = authorRepository.getAuthorList().get(i);
+        for (Author a : authorList) {
+            if (a.getEmail().equals(email)) {
+                emailNotFound = true;
+            } else if (a.getPassword().equals(password)) {
+                passwordNotEqual = true;
             }
         }
-        return myAuthor;
+
+        if (emailNotFound == false) {
+            throw new NoSuchElementException("계정이 존재하지 않습니다.");
+        }
+        if (passwordNotEqual == false) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
     }
 }
 
